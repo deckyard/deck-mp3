@@ -1,0 +1,28 @@
+[package]
+name = "@deckyard/mp3"
+version = "0.1.0"
+description = "Read and edit MP3 metadata - ID3v2.2/2.3/2.4 and ID3v1.1 tags, embedded artwork, MPEG audio frame and Xing/VBRI stream analysis - and build M3U/M3U8 playlists"
+license = "LGPL-3.0-only"
+authors = ["mplx <mplx@jennifer-lang.dev>"]
+capabilities = []
+keywords = [
+    "mp3",
+    "id3",
+    "id3v2",
+    "id3v1",
+    "mpeg",
+    "metadata",
+    "tags",
+    "m3u",
+    "playlist",
+    "audio",
+]
+
+[package.urls]
+deck = "https://raw.githubusercontent.com/deckyard/deck-mp3/main/deck.toml"
+homepage = "https://github.com/deckyard/deck-mp3"
+manual = "https://deckyard.github.io/deck-mp3/"
+
+[engines]
+jennifer = ">=0.25.0"
+jennifer-tiny = ">=0.25.0"
