@@ -263,15 +263,14 @@ func encodeUtf16(s as string, bigEndian as bool, withBom as bool) {
  * @return {bytes} `out` with the two bytes appended
  */
 func pushUtf16Unit(out as bytes, unit as int, bigEndian as bool) {
-    def grown as bytes init $out;
     if ($bigEndian) {
-        $grown[] = ($unit >> 8) & 0xff;
-        $grown[] = $unit & 0xff;
+        $out[] = ($unit >> 8) & 0xff;
+        $out[] = $unit & 0xff;
     } else {
-        $grown[] = $unit & 0xff;
-        $grown[] = ($unit >> 8) & 0xff;
+        $out[] = $unit & 0xff;
+        $out[] = ($unit >> 8) & 0xff;
     }
-    return $grown;
+    return $out;
 }
 
 /**
