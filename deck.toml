@@ -1,6 +1,6 @@
 [package]
 name = "@deckyard/mp3"
-version = "0.1.0"
+version = "0.2.0-dev"
 description = "Read and edit MP3 metadata - ID3v2.2/2.3/2.4 and ID3v1.1 tags, embedded artwork, MPEG audio frame and Xing/VBRI stream analysis - and build M3U/M3U8 playlists"
 license = "LGPL-3.0-only"
 authors = ["mplx <mplx@jennifer-lang.dev>"]
