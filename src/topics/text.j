@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: LGPL-3.0-only
 # SPDX-FileCopyrightText: Copyright (C) 2026 mplx <mplx@jennifer-lang.dev>
-# pragma-jennifer-version: >=0.25.0
+# pragma-jennifer-version: >=0.26.0
 
 # mp3 - the four ID3v2 text encodings, and the strings built on them.
 # Spliced into mp3.j via include - not a standalone module.
@@ -184,9 +184,9 @@ func decodeUtf16(data as bytes, bigEndian as bool) {
  */
 func utf16Unit(data as bytes, offset as int, bigEndian as bool) {
     if ($bigEndian) {
-        return ($data[$offset] << 8) | $data[$offset + 1];
+        return binary.readUint($data, $offset, 2, "be");
     }
-    return ($data[$offset + 1] << 8) | $data[$offset];
+    return binary.readUint($data, $offset, 2, "le");
 }
 
 /**

@@ -24,5 +24,5 @@ homepage = "https://github.com/deckyard/deck-mp3"
 manual = "https://deckyard.github.io/deck-mp3/"
 
 [engines]
-jennifer = ">=0.25.0"
-jennifer-tiny = ">=0.25.0"
+jennifer = ">=0.26.0"
+jennifer-tiny = ">=0.26.0"

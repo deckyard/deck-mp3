@@ -21,7 +21,7 @@ jvc vendors the `src/` subtree to `vendor/deckyard/mp3/`. Without jvc, copy
 `src/` (the entry module `mp3.j` and `topics/`) from a checkout or a
 `deckyard-mp3-<version>.tar.gz` release archive into that directory.
 
-Requires Jennifer 0.25.0 or newer, and runs on `jennifer-tiny`. No network,
+Requires Jennifer 0.26.0 or newer, and runs on `jennifer-tiny`. No network,
 subprocess or database; only `open`, `save`, `writeFile`, `openPlaylist` and
 `savePlaylist` touch the disk, through `fs`.
 

@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: LGPL-3.0-only
 # SPDX-FileCopyrightText: Copyright (C) 2026 mplx <mplx@jennifer-lang.dev>
-# pragma-jennifer-version: >=0.25.0
+# pragma-jennifer-version: >=0.26.0
 
 # mp3 - the shared primitives every other topic builds on.
 # Spliced into mp3.j via include - not a standalone module.
@@ -58,7 +58,7 @@ func needBytes(data as bytes, offset as int, count as int) {
  */
 func beUint16(data as bytes, offset as int) {
     needBytes($data, $offset, 2);
-    return ($data[$offset] << 8) | $data[$offset + 1];
+    return binary.readUint($data, $offset, 2, "be");
 }
 
 /**
@@ -73,8 +73,7 @@ func beUint16(data as bytes, offset as int) {
  */
 func beUint24(data as bytes, offset as int) {
     needBytes($data, $offset, 3);
-    def hi as int init $data[$offset] << 16;
-    return $hi | ($data[$offset + 1] << 8) | $data[$offset + 2];
+    return ($data[$offset] << 16) | binary.readUint($data, $offset + 1, 2, "be");
 }
 
 /**
@@ -87,9 +86,7 @@ func beUint24(data as bytes, offset as int) {
  */
 func beUint32(data as bytes, offset as int) {
     needBytes($data, $offset, 4);
-    def hi as int init ($data[$offset] << 8) | $data[$offset + 1];
-    def lo as int init ($data[$offset + 2] << 8) | $data[$offset + 3];
-    return ($hi << 16) | $lo;
+    return binary.readUint($data, $offset, 4, "be");
 }
 
 /**
