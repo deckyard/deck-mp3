@@ -137,7 +137,7 @@ func testLeadingInt() {
 }
 
 func testMagicAt() {
-    def b as bytes init convert.bytesFromString("xxID3yy", "utf-8");
+    def b as bytes init convert.bytesFromString("utf-8", "xxID3yy");
     testing.assertTrue(magicAt($b, 2, "ID3"));
     testing.assertFalse(magicAt($b, 1, "ID3"));
     testing.assertFalse(magicAt($b, 5, "ID3"));

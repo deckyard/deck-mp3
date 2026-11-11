@@ -103,7 +103,7 @@ export func decodeText(data as bytes, enc as int) {
     }
     if ($enc == TEXT_UTF8) {
         try {
-            return convert.stringFromBytes($data, "utf-8");
+            return convert.stringFromBytes("utf-8", $data);
         } catch (e) {
             return decodeLatin1($data);
         }
@@ -120,7 +120,7 @@ export func decodeText(data as bytes, enc as int) {
  * @return {string} the decoded text
  */
 func decodeLatin1(data as bytes) {
-    return encoding.decode($data, "iso-8859-1");
+    return encoding.decode("iso-8859-1", $data);
 }
 
 /**
@@ -184,9 +184,9 @@ func decodeUtf16(data as bytes, bigEndian as bool) {
  */
 func utf16Unit(data as bytes, offset as int, bigEndian as bool) {
     if ($bigEndian) {
-        return binary.readUint($data, $offset, 2, "be");
+        return binary.readUint("be", $data, $offset, 2);
     }
-    return binary.readUint($data, $offset, 2, "le");
+    return binary.readUint("le", $data, $offset, 2);
 }
 
 /**
@@ -207,7 +207,7 @@ export func encodeText(s as string, enc as int) {
         fail("unknown ID3v2 text encoding " + convert.toString($enc));
     }
     if ($enc == TEXT_UTF8) {
-        return convert.bytesFromString($s, "utf-8");
+        return convert.bytesFromString("utf-8", $s);
     }
     if ($enc == TEXT_UTF16) {
         return encodeUtf16($s, false, true);
@@ -218,7 +218,7 @@ export func encodeText(s as string, enc as int) {
     if (not isLatin1($s)) {
         fail("text cannot be written as ISO-8859-1: " + $s);
     }
-    return encoding.encode($s, "iso-8859-1");
+    return encoding.encode("iso-8859-1", $s);
 }
 
 /**
@@ -284,7 +284,7 @@ func pushUtf16Unit(out as bytes, unit as int, bigEndian as bool) {
  */
 func isLatin1(s as string) {
     try {
-        encoding.encode($s, "iso-8859-1");
+        encoding.encode("iso-8859-1", $s);
         return true;
     } catch (e) {
         return false;
@@ -300,7 +300,7 @@ func isLatin1(s as string) {
  * @return {bool} true when it is
  */
 func isPrintableAscii(s as string) {
-    def raw as bytes init convert.bytesFromString($s, "utf-8");
+    def raw as bytes init convert.bytesFromString("utf-8", $s);
     for (def i as int init 0; $i < len($raw); $i = $i + 1) {
         if ($raw[$i] < 0x20 or $raw[$i] > 0x7e) {
             return false;

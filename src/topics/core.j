@@ -58,7 +58,7 @@ func needBytes(data as bytes, offset as int, count as int) {
  */
 func beUint16(data as bytes, offset as int) {
     needBytes($data, $offset, 2);
-    return binary.readUint($data, $offset, 2, "be");
+    return binary.readUint("be", $data, $offset, 2);
 }
 
 /**
@@ -73,7 +73,7 @@ func beUint16(data as bytes, offset as int) {
  */
 func beUint24(data as bytes, offset as int) {
     needBytes($data, $offset, 3);
-    return ($data[$offset] << 16) | binary.readUint($data, $offset + 1, 2, "be");
+    return ($data[$offset] << 16) | binary.readUint("be", $data, $offset + 1, 2);
 }
 
 /**
@@ -86,7 +86,7 @@ func beUint24(data as bytes, offset as int) {
  */
 func beUint32(data as bytes, offset as int) {
     needBytes($data, $offset, 4);
-    return binary.readUint($data, $offset, 4, "be");
+    return binary.readUint("be", $data, $offset, 4);
 }
 
 /**
@@ -221,5 +221,5 @@ func magicAt(data as bytes, offset as int, want as string) {
  * @throws {Error} when a character has no byte in ISO-8859-1
  */
 func latin1Bytes(s as string) {
-    return encoding.encode($s, "iso-8859-1");
+    return encoding.encode("iso-8859-1", $s);
 }

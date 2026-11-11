@@ -391,7 +391,7 @@ func testAnId3v24FrameSizeWrittenAsAPlainIntegerIsStillRead() {
 
 func testACompressedId3v23FrameIsExpanded() {
     def body as bytes init textBody(TEXT_LATIN1, strings.repeat("ab", 200));
-    def packed as bytes init compress.pack($body, "zlib");
+    def packed as bytes init compress.pack("zlib", $body);
     def frameParts as list of bytes init [];
     $frameParts[] = latin1Bytes("TIT2");
     $frameParts[] = beUint32Bytes(len($packed) + 4);
@@ -410,7 +410,7 @@ func testACompressedId3v23FrameIsExpanded() {
 
 func testACompressedFrameClaimingAnAbsurdSizeIsLeftAlone() {
     def body as bytes init textBody(TEXT_LATIN1, "x");
-    def packed as bytes init compress.pack($body, "zlib");
+    def packed as bytes init compress.pack("zlib", $body);
     # the claim is what is capped, so nothing is allocated to find out
     testing.assertEqual(inflateFrame($packed, MAX_DECOMPRESSED + 1), $packed);
     testing.assertEqual(inflateFrame($packed, len($body)), $body);
@@ -499,14 +499,14 @@ func testACompressedFrameThatStatesNoLengthIsLeftAlone() {
     # nothing is malformed - and expanding one would let the file decide how
     # much memory to allocate
     def body as bytes init textBody(TEXT_LATIN1, "x");
-    def packed as bytes init compress.pack($body, "zlib");
+    def packed as bytes init compress.pack("zlib", $body);
     testing.assertEqual(inflateFrame($packed, 0), $packed);
     testing.assertEqual(inflateFrame($packed, -1), $packed);
 }
 
 func testACompressedV24FrameWithNoLengthIsLeftCompressed() {
     def body as bytes init textBody(TEXT_LATIN1, strings.repeat("ab", 200));
-    def packed as bytes init compress.pack($body, "zlib");
+    def packed as bytes init compress.pack("zlib", $body);
     def frameParts as list of bytes init [];
     $frameParts[] = latin1Bytes("TIT2");
     $frameParts[] = syncsafe32Bytes(len($packed));
@@ -526,7 +526,7 @@ func testACompressedV24FrameWithNoLengthIsLeftCompressed() {
 
 func testACompressedV24FrameWithALengthIsExpanded() {
     def body as bytes init textBody(TEXT_LATIN1, strings.repeat("ab", 200));
-    def packed as bytes init compress.pack($body, "zlib");
+    def packed as bytes init compress.pack("zlib", $body);
     def stored as bytes init binary.join([syncsafe32Bytes(len($body)), $packed]);
     def frameParts as list of bytes init [];
     $frameParts[] = latin1Bytes("TIT2");

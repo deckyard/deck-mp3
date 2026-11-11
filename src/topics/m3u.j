@@ -415,7 +415,7 @@ export func openPlaylist(playlistPath as string) {
     def raw as bytes init fs.readBytes($playlistPath);
     def text as string init "";
     try {
-        $text = convert.stringFromBytes($raw, "utf-8");
+        $text = convert.stringFromBytes("utf-8", $raw);
     } catch (e) {
         $text = decodeLatin1($raw);
     }
@@ -441,5 +441,5 @@ export func savePlaylist(playlist as Playlist, playlistPath as string) {
         fs.writeBytes($playlistPath, latin1Bytes($text));
         return;
     }
-    fs.writeBytes($playlistPath, convert.bytesFromString($text, "utf-8"));
+    fs.writeBytes($playlistPath, convert.bytesFromString("utf-8", $text));
 }

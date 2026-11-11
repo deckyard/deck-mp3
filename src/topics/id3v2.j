@@ -482,7 +482,7 @@ func inflateFrame(body as bytes, declared as int) {
         return $body;
     }
     try {
-        def out as bytes init compress.unpack($body, "zlib");
+        def out as bytes init compress.unpack("zlib", $body);
         if (len($out) > MAX_DECOMPRESSED) {
             return $body;
         }
