@@ -19,6 +19,7 @@
 - [The ID3 formats on disk](reference/id3.md)
 - [The MPEG frame header](reference/mpeg.md)
 - [Cheatsheet](reference/cheatsheet.md)
+- [Design](design.md)
 
 # Internal
 
