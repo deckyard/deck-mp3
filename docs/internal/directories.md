@@ -21,7 +21,6 @@ resolve late.
 ```
 src/mp3.j             the module boundary and every export
 src/mp3_test.j        the white-box overlay
-src/topics/version.j      generated; VERSION
 src/topics/core.j         errors, byte readers, synchsafe integers
 src/topics/genres.j       the 192-entry ID3v1 genre table
 src/topics/text.j         the four ID3v2 text encodings
@@ -34,8 +33,7 @@ src/topics/file.j         whole files, reading and writing
 src/topics/m3u.j          M3U and M3U8 playlists
 ```
 
-Every topic has a `_test.j` beside it except the generated `version.j`,
-which opts out with a `# ci-no-overlay` line. The MPEG fixtures the other
+Every topic has a `_test.j` beside it. The MPEG fixtures the other
 overlays build files from (`silentFrame`, `silentStream`, `silentStreamMs`)
 are in `src/topics/mpeg_test.j`.
 

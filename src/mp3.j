@@ -51,7 +51,6 @@ use path;
 use uuid;
 use compress;
 
-include "topics/version.j";
 include "topics/core.j";
 include "topics/genres.j";
 include "topics/text.j";

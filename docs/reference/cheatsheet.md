@@ -7,12 +7,6 @@ Every export of `@deckyard/mp3`, by topic, called through the import alias:
 `import "@deckyard/mp3/" as mp3;` then `mp3.open(path)`. `tools/check-docs.sh`
 checks each signature against the source.
 
-## Version
-
-| Constant | Value | Meaning |
-|---|---|---|
-| `VERSION` | `"0.1.0"` | The deck version, stamped by `tools/inject-version.sh`. |
-
 ## Errors
 
 | Constant | Value | Meaning |
