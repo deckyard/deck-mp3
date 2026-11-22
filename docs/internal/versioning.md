@@ -15,13 +15,13 @@ disagrees, and rejects a prerelease tag (`0.3.0-rc1`).
 
 ## The interpreter floor
 
-Every `.j` file opens with `# pragma-jennifer-version: >=0.26.0`, which the
+Every `.j` file opens with `# pragma-jennifer-version: >=0.27.0`, which the
 interpreter enforces when it reads the file. `tools/check-headers.sh` keeps
 those in step with `engines.jennifer` in the manifest, and the licence header
 with `package.license`.
 
 A dev build of the interpreter bypasses the floor, so `tools/deck-lib.sh`
-picks the CI container from the floor (`:0.26`) instead of `dev`. A
+picks the CI container from the floor (`:0.27`) instead of `dev`. A
 construct from a newer language version then fails CI instead of breaking
-consumers on 0.26. The floor is 0.26.0 for the `binary` number readers
-(`readUint`); until 0.26.0 is tagged CI runs on the `dev` image.
+consumers on 0.27. The floor is 0.27.0 for the UTF-8 codecs of
+`encoding.encode` / `decode` and `strings.replicate`.

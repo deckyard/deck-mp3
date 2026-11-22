@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: LGPL-3.0-only
 # SPDX-FileCopyrightText: Copyright (C) 2026 mplx <mplx@jennifer-lang.dev>
-# pragma-jennifer-version: >=0.26.0
+# pragma-jennifer-version: >=0.27.0
 
 # mp3 - white-box tests for the id3v1 topic.
 # Spliced into mp3_test.j via include - run with:
@@ -21,7 +21,7 @@ func testTagSize() {
 func testRenderId3v1IsAlwaysOneBlock() {
     def tag as Id3v1 init emptyId3v1();
     testing.assertEqual(len(renderId3v1($tag)), ID3V1_SIZE);
-    $tag.title = strings.repeat("x", 100);
+    $tag.title = strings.replicate("x", 100);
     $tag.track = 7;
     testing.assertEqual(len(renderId3v1($tag)), ID3V1_SIZE);
 }
@@ -96,7 +96,7 @@ func testNoTrackNumberLeavesTheWholeCommentField() {
 
 func testFieldsAreTruncatedToTheirWidth() {
     def tag as Id3v1 init emptyId3v1();
-    $tag.title = strings.repeat("a", 40);
+    $tag.title = strings.replicate("a", 40);
     $tag.year = "20250";
     def read as Id3v1 init readId3v1(fileWithTrailer(1, renderId3v1($tag)));
     testing.assertEqual(len($read.title), 30);

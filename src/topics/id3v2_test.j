@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: LGPL-3.0-only
 # SPDX-FileCopyrightText: Copyright (C) 2026 mplx <mplx@jennifer-lang.dev>
-# pragma-jennifer-version: >=0.26.0
+# pragma-jennifer-version: >=0.27.0
 
 # mp3 - white-box tests for the id3v2 topic.
 # Spliced into mp3_test.j via include - run with:
@@ -48,7 +48,7 @@ func testId3v2SizeIsClampedToTheBuffer() {
     def frames as list of Id3v2Frame init [];
     $frames[] = plainFrame("TIT2", "x");
     def raw as bytes init renderId3v2($frames, 4, 1000);
-    def truncated as bytes init binary.slice($raw, 0, 50);
+    def truncated as bytes init $raw[..50];
     testing.assertEqual(id3v2Size($truncated), 50);
 }
 
@@ -284,7 +284,7 @@ func testAnUnsynchronisedId3v23TagIsRead() {
     def frames as list of Id3v2Frame init [];
     $frames[] = plainFrame("TIT2", "title");
     def plain as bytes init renderId3v2($frames, 3, 0);
-    def body as bytes init binary.slice($plain, ID3V2_HEADER_SIZE, len($plain));
+    def body as bytes init $plain[ID3V2_HEADER_SIZE..len($plain)];
     def protectedBody as bytes init unsynchronise(binary.join([$body, bytesOf([0xff, 0xe0])]));
 
     def parts as list of bytes init [];
@@ -323,7 +323,7 @@ func testAnExtendedHeaderIsSkipped() {
     def frames as list of Id3v2Frame init [];
     $frames[] = plainFrame("TIT2", "title");
     def plain as bytes init renderId3v2($frames, 3, 0);
-    def body as bytes init binary.slice($plain, ID3V2_HEADER_SIZE, len($plain));
+    def body as bytes init $plain[ID3V2_HEADER_SIZE..len($plain)];
 
     # an ID3v2.3 extended header: a size that excludes its own four bytes
     def extended as bytes init binary.join([beUint32Bytes(6), binary.make(6, 0), $body]);
@@ -339,7 +339,7 @@ func testAnId3v24ExtendedHeaderCountsItsOwnLength() {
     def frames as list of Id3v2Frame init [];
     $frames[] = plainFrame("TIT2", "title");
     def plain as bytes init renderId3v2($frames, 4, 0);
-    def body as bytes init binary.slice($plain, ID3V2_HEADER_SIZE, len($plain));
+    def body as bytes init $plain[ID3V2_HEADER_SIZE..len($plain)];
 
     def extended as bytes init binary.join([syncsafe32Bytes(10), binary.make(6, 0), $body]);
     def parts as list of bytes init [];
@@ -354,7 +354,7 @@ func testAFooterIsCountedInTheTagSize() {
     def frames as list of Id3v2Frame init [];
     $frames[] = plainFrame("TIT2", "title");
     def plain as bytes init renderId3v2($frames, 4, 0);
-    def body as bytes init binary.slice($plain, ID3V2_HEADER_SIZE, len($plain));
+    def body as bytes init $plain[ID3V2_HEADER_SIZE..len($plain)];
 
     def parts as list of bytes init [];
     $parts[] = latin1Bytes("ID3");
@@ -371,7 +371,7 @@ func testAFooterIsCountedInTheTagSize() {
 func testAnId3v24FrameSizeWrittenAsAPlainIntegerIsStillRead() {
     # the bug every tagger of a certain vintage shipped: a size over 127
     # written big-endian instead of synchsafe
-    def body as bytes init textBody(TEXT_LATIN1, strings.repeat("x", 200));
+    def body as bytes init textBody(TEXT_LATIN1, strings.replicate("x", 200));
     def frameParts as list of bytes init [];
     $frameParts[] = latin1Bytes("TIT2");
     $frameParts[] = beUint32Bytes(len($body));
@@ -390,7 +390,7 @@ func testAnId3v24FrameSizeWrittenAsAPlainIntegerIsStillRead() {
 }
 
 func testACompressedId3v23FrameIsExpanded() {
-    def body as bytes init textBody(TEXT_LATIN1, strings.repeat("ab", 200));
+    def body as bytes init textBody(TEXT_LATIN1, strings.replicate("ab", 200));
     def packed as bytes init compress.pack("zlib", $body);
     def frameParts as list of bytes init [];
     $frameParts[] = latin1Bytes("TIT2");
@@ -459,7 +459,7 @@ func testATruncatedTagYieldsTheFramesBeforeTheDamage() {
     $frames[] = plainFrame("TIT2", "title");
     $frames[] = plainFrame("TPE1", "artist");
     def raw as bytes init renderId3v2($frames, 4, 0);
-    def cut as bytes init binary.slice($raw, 0, len($raw) - 4);
+    def cut as bytes init $raw[..len($raw) - 4];
     def tag as Id3v2 init readId3v2($cut);
     testing.assertTrue($tag.present);
     testing.assertEqual(len($tag.frames), 1);
@@ -474,7 +474,7 @@ func testGarbageWhereAFrameIdBelongsEndsTheParse() {
     $parts[] = latin1Bytes("ID3");
     $parts[] = bytesOf([4, 0, 0]);
     def body as bytes init binary.join([
-        binary.slice($raw, ID3V2_HEADER_SIZE, len($raw)),
+        $raw[ID3V2_HEADER_SIZE..len($raw)],
         bytesOf([0x2d, 0x2d, 0x2d, 0x2d]),
         binary.make(16, 0x2d)
     ]);
@@ -505,7 +505,7 @@ func testACompressedFrameThatStatesNoLengthIsLeftAlone() {
 }
 
 func testACompressedV24FrameWithNoLengthIsLeftCompressed() {
-    def body as bytes init textBody(TEXT_LATIN1, strings.repeat("ab", 200));
+    def body as bytes init textBody(TEXT_LATIN1, strings.replicate("ab", 200));
     def packed as bytes init compress.pack("zlib", $body);
     def frameParts as list of bytes init [];
     $frameParts[] = latin1Bytes("TIT2");
@@ -525,7 +525,7 @@ func testACompressedV24FrameWithNoLengthIsLeftCompressed() {
 }
 
 func testACompressedV24FrameWithALengthIsExpanded() {
-    def body as bytes init textBody(TEXT_LATIN1, strings.repeat("ab", 200));
+    def body as bytes init textBody(TEXT_LATIN1, strings.replicate("ab", 200));
     def packed as bytes init compress.pack("zlib", $body);
     def stored as bytes init binary.join([syncsafe32Bytes(len($body)), $packed]);
     def frameParts as list of bytes init [];

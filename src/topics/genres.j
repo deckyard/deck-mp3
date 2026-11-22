@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: LGPL-3.0-only
 # SPDX-FileCopyrightText: Copyright (C) 2026 mplx <mplx@jennifer-lang.dev>
-# pragma-jennifer-version: >=0.26.0
+# pragma-jennifer-version: >=0.27.0
 
 # mp3 - the ID3v1 numeric genre table.
 # Spliced into mp3.j via include - not a standalone module.
@@ -287,8 +287,8 @@ export func resolveGenre(raw as string) {
     if (strings.startsWith($text, "(")) {
         def close as int init strings.indexOf($text, ")");
         if ($close > 0) {
-            def inner as string init strings.substring($text, 1, $close);
-            def rest as string init strings.trim(strings.substring($text, $close + 1));
+            def inner as string init $text[1..$close];
+            def rest as string init strings.trim($text[$close + 1..]);
             def resolved as string init refinementName($inner);
             if ($rest != "") {
                 return $rest;

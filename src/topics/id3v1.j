@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: LGPL-3.0-only
 # SPDX-FileCopyrightText: Copyright (C) 2026 mplx <mplx@jennifer-lang.dev>
-# pragma-jennifer-version: >=0.26.0
+# pragma-jennifer-version: >=0.27.0
 
 # mp3 - the 128-byte ID3v1 tag in the last block of the file.
 # Spliced into mp3.j via include - not a standalone module.
@@ -124,7 +124,7 @@ func emptyId3v1() {
  */
 func fixedField(data as bytes, offset as int, width as int) {
     needBytes($data, $offset, $width);
-    def raw as bytes init binary.slice($data, $offset, $offset + $width);
+    def raw as bytes init $data[$offset..$offset + $width];
     return trimField(decodeLatin1($raw));
 }
 
@@ -184,7 +184,7 @@ func genreByte(genre as int) {
 func fixedBytes(s as string, width as int) {
     def flat as string init toLatin1Lossy($s);
     if (len($flat) > $width) {
-        $flat = strings.substring($flat, 0, $width);
+        $flat = $flat[..$width];
     }
     def encoded as bytes init latin1Bytes($flat);
     def padding as int init $width - len($encoded);

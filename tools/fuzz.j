@@ -1,7 +1,7 @@
 #!/usr/bin/env -S jennifer run
 # SPDX-License-Identifier: LGPL-3.0-only
 # SPDX-FileCopyrightText: Copyright (C) 2026 mplx <mplx@jennifer-lang.dev>
-# pragma-jennifer-version: >=0.26.0
+# pragma-jennifer-version: >=0.27.0
 
 /**
  * fuzz - throw malformed input at every reader and assert it holds.
@@ -266,7 +266,7 @@ func checkPlaylist(label as string, text as string) {
  */
 func sweepTruncations(label as string, data as bytes) {
     for (def cut as int init 0; $cut < len($data); $cut = $cut + 23) {
-        check($label + "-cut" + convert.toString($cut), binary.slice($data, 0, $cut));
+        check($label + "-cut" + convert.toString($cut), $data[..$cut]);
     }
 }
 

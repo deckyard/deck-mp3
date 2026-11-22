@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: LGPL-3.0-only
 # SPDX-FileCopyrightText: Copyright (C) 2026 mplx <mplx@jennifer-lang.dev>
-# pragma-jennifer-version: >=0.26.0
+# pragma-jennifer-version: >=0.27.0
 
 # mp3 - white-box tests for the text topic.
 # Spliced into mp3_test.j via include - run with:
@@ -101,8 +101,8 @@ func testALoneSurrogateBecomesTheReplacementCharacter() {
     def lone as bytes init bytesOf([0xd8, 0x3d, 0x00, 0x41]);
     def decoded as string init decodeUtf16($lone, true);
     testing.assertEqual(len($decoded), 2);
-    testing.assertEqual(convert.toCodepoint(strings.substring($decoded, 0, 1)), 0xfffd);
-    testing.assertEqual(strings.substring($decoded, 1), "A");
+    testing.assertEqual(convert.toCodepoint($decoded[..1]), 0xfffd);
+    testing.assertEqual($decoded[1..], "A");
 }
 
 func testATrailingOddByteBecomesTheReplacementCharacter() {

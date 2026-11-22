@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: LGPL-3.0-only
 # SPDX-FileCopyrightText: Copyright (C) 2026 mplx <mplx@jennifer-lang.dev>
-# pragma-jennifer-version: >=0.26.0
+# pragma-jennifer-version: >=0.27.0
 
 # mp3 - the shared primitives every other topic builds on.
 # Spliced into mp3.j via include - not a standalone module.
@@ -209,7 +209,7 @@ func magicAt(data as bytes, offset as int, want as string) {
     if ($offset < 0 or $n == 0 or $offset + $n > len($data)) {
         return false;
     }
-    def seen as bytes init binary.slice($data, $offset, $offset + $n);
+    def seen as bytes init $data[$offset..$offset + $n];
     return decodeLatin1($seen) == $want;
 }
 

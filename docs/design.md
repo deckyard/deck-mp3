@@ -143,8 +143,10 @@ writer.
 
 ## Dependencies on the interpreter
 
+- Floor `>=0.27.0` for `jennifer` and `jennifer-tiny`: the UTF-8 codecs of
+  `encoding.encode` / `decode` and `strings.replicate` arrived in 0.27.0.
+  The deck stays runnable on `jennifer-tiny`.
 - The `binary` library's integer readers (`binary.readUint` and friends),
-  which first shipped in 0.26.0, hence the floor `>=0.26.0` for `jennifer`
-  and `jennifer-tiny`. The deck stays runnable on `jennifer-tiny`.
+  first shipped in 0.26.0.
 - `compress` (zlib for compressed frames), `encoding` (the text encodings),
   `uuid` (temporary names) and `fs`.

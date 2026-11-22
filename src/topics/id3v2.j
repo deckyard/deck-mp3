@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: LGPL-3.0-only
 # SPDX-FileCopyrightText: Copyright (C) 2026 mplx <mplx@jennifer-lang.dev>
-# pragma-jennifer-version: >=0.26.0
+# pragma-jennifer-version: >=0.27.0
 
 # mp3 - the ID3v2 container: header, frames, unsynchronisation.
 # Spliced into mp3.j via include - not a standalone module.
@@ -167,7 +167,7 @@ export func readId3v2(data as bytes) {
     if ($bodyEnd > len($data)) {
         $bodyEnd = len($data);
     }
-    def body as bytes init binary.slice($data, ID3V2_HEADER_SIZE, $bodyEnd);
+    def body as bytes init $data[ID3V2_HEADER_SIZE..$bodyEnd];
     def unsync as bool init ($tag.flags & TAG_FLAG_UNSYNC) != 0;
     if ($unsync and $major < 4) {
         $body = deunsynchronise($body);
@@ -228,7 +228,7 @@ func readFrames(body as bytes, start as int, major as int, unsync as bool) {
         if ($body[$at] == 0) {
             break;
         }
-        def id as string init decodeLatin1(binary.slice($body, $at, $at + $idLength));
+        def id as string init decodeLatin1($body[$at..$at + $idLength]);
         if (not isFrameId($id)) {
             break;
         }
@@ -241,7 +241,7 @@ func readFrames(body as bytes, start as int, major as int, unsync as bool) {
             break;
         }
         def flags as int init frameFlags($body, $at, $major, $idLength);
-        def raw as bytes init binary.slice($body, $from, $from + $bodyLength);
+        def raw as bytes init $body[$from..$from + $bodyLength];
         if ($major == 4 and ($unsync or ($flags & V4_FRAME_UNSYNC) != 0)) {
             $raw = deunsynchronise($raw);
         }
@@ -362,7 +362,7 @@ func frameBoundaryAt(body as bytes, at as int, major as int) {
     if ($at + $idLength > $size) {
         return false;
     }
-    return isFrameId(decodeLatin1(binary.slice($body, $at, $at + $idLength)));
+    return isFrameId(decodeLatin1($body[$at..$at + $idLength]));
 }
 
 /**
@@ -451,7 +451,7 @@ func stripFrameExtras(raw as bytes, major as int, flags as int) {
     if ($at > $size) {
         $at = $size;
     }
-    def body as bytes init binary.slice($raw, $at, $size);
+    def body as bytes init $raw[$at..$size];
     if ($encrypted or not $compressed) {
         return FramePayload{data: $body, compressed: $compressed, encrypted: $encrypted};
     }
@@ -514,10 +514,10 @@ func deunsynchronise(data as bytes) {
     while ($at < $size) {
         def hit as int init binary.indexOf($data, $needle, $at);
         if ($hit < 0) {
-            $parts[] = binary.slice($data, $at, $size);
+            $parts[] = $data[$at..$size];
             break;
         }
-        $parts[] = binary.slice($data, $at, $hit + 1);
+        $parts[] = $data[$at..$hit + 1];
         $at = $hit + 2;
     }
     return binary.join($parts);
@@ -655,10 +655,10 @@ export func frameValues(f as Id3v2Frame) {
         return [];
     }
     def enc as int init textEncodingOf($f.data[0]);
-    def body as bytes init binary.slice($f.data, 1, len($f.data));
+    def body as bytes init $f.data[1..len($f.data)];
     if (isUserFrame($f.id)) {
         def description as TextField init readTerminated($body, 0, $enc);
-        def rest as bytes init binary.slice($body, $description.next, len($body));
+        def rest as bytes init $body[$description.next..len($body)];
         return splitValues($rest, $enc);
     }
     return splitValues($body, $enc);
@@ -678,7 +678,7 @@ export func frameDescription(f as Id3v2Frame) {
     if (len($f.data) < 1 or not isUserFrame($f.id)) {
         return "";
     }
-    def body as bytes init binary.slice($f.data, 1, len($f.data));
+    def body as bytes init $f.data[1..len($f.data)];
     def field as TextField init readTerminated($body, 0, textEncodingOf($f.data[0]));
     return $field.text;
 }

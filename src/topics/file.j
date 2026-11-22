@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: LGPL-3.0-only
 # SPDX-FileCopyrightText: Copyright (C) 2026 mplx <mplx@jennifer-lang.dev>
-# pragma-jennifer-version: >=0.26.0
+# pragma-jennifer-version: >=0.27.0
 
 # mp3 - the whole file: where the audio is, and how to put a tag back.
 # Spliced into mp3.j via include - not a standalone module.
@@ -145,7 +145,7 @@ export func audioRange(data as bytes) {
  */
 export func strip(data as bytes) {
     def range as AudioRange init audioRange($data);
-    return binary.slice($data, $range.start, $range.end);
+    return $data[$range.start..$range.end];
 }
 
 /**
@@ -331,7 +331,7 @@ func streamOut(temp as string, head as bytes, data as bytes, range as AudioRange
         fs.writeBytes($handle, $head);
     }
     if ($range.end > $range.start) {
-        fs.writeBytes($handle, binary.slice($data, $range.start, $range.end));
+        fs.writeBytes($handle, $data[$range.start..$range.end]);
     }
     if (len($tail) > 0) {
         fs.writeBytes($handle, $tail);

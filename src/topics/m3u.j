@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: LGPL-3.0-only
 # SPDX-FileCopyrightText: Copyright (C) 2026 mplx <mplx@jennifer-lang.dev>
-# pragma-jennifer-version: >=0.26.0
+# pragma-jennifer-version: >=0.27.0
 
 # mp3 - M3U and M3U8 playlists.
 # Spliced into mp3.j via include - not a standalone module.
@@ -202,23 +202,23 @@ export func parsePlaylist(text as string) {
                 continue;
             }
             if (strings.startsWith($line, "#PLAYLIST:")) {
-                $playlist.title = strings.trim(strings.substring($line, 10));
+                $playlist.title = strings.trim($line[10..]);
                 continue;
             }
             if (strings.startsWith($line, "#EXTGRP:")) {
-                $group = strings.trim(strings.substring($line, 8));
+                $group = strings.trim($line[8..]);
                 continue;
             }
             if (strings.startsWith($line, "#EXTALB:")) {
-                $pending.album = strings.trim(strings.substring($line, 8));
+                $pending.album = strings.trim($line[8..]);
                 continue;
             }
             if (strings.startsWith($line, "#EXTART:")) {
-                $pending.artist = strings.trim(strings.substring($line, 8));
+                $pending.artist = strings.trim($line[8..]);
                 continue;
             }
             if (strings.startsWith($line, "#EXTINF:")) {
-                $pending = readExtinf($pending, strings.substring($line, 8));
+                $pending = readExtinf($pending, $line[8..]);
                 $playlist.extended = true;
             }
             continue;
@@ -246,8 +246,8 @@ func readExtinf(entry as PlaylistEntry, body as string) {
     def cut as int init strings.indexOf($body, ",");
     def head as string init $body;
     if ($cut >= 0) {
-        $head = strings.substring($body, 0, $cut);
-        $out.title = strings.trim(strings.substring($body, $cut + 1));
+        $head = $body[..$cut];
+        $out.title = strings.trim($body[$cut + 1..]);
     }
     $out.duration = readDuration(strings.trim($head));
     return $out;
@@ -283,11 +283,11 @@ func stripBom(text as string) {
     if ($text == "") {
         return $text;
     }
-    def first as string init strings.substring($text, 0, 1);
+    def first as string init $text[..1];
     if (convert.toCodepoint($first) != BOM) {
         return $text;
     }
-    return strings.substring($text, 1);
+    return $text[1..];
 }
 
 /**
@@ -415,7 +415,7 @@ export func openPlaylist(playlistPath as string) {
     def raw as bytes init fs.readBytes($playlistPath);
     def text as string init "";
     try {
-        $text = convert.stringFromBytes("utf-8", $raw);
+        $text = encoding.decode("utf-8", $raw);
     } catch (e) {
         $text = decodeLatin1($raw);
     }
@@ -441,5 +441,5 @@ export func savePlaylist(playlist as Playlist, playlistPath as string) {
         fs.writeBytes($playlistPath, latin1Bytes($text));
         return;
     }
-    fs.writeBytes($playlistPath, convert.bytesFromString("utf-8", $text));
+    fs.writeBytes($playlistPath, encoding.encode("utf-8", $text));
 }

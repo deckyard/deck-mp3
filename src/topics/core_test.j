@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: LGPL-3.0-only
 # SPDX-FileCopyrightText: Copyright (C) 2026 mplx <mplx@jennifer-lang.dev>
-# pragma-jennifer-version: >=0.26.0
+# pragma-jennifer-version: >=0.27.0
 
 # mp3 - white-box tests for the core topic.
 # Spliced into mp3_test.j via include - run with:
@@ -137,7 +137,7 @@ func testLeadingInt() {
 }
 
 func testMagicAt() {
-    def b as bytes init convert.bytesFromString("utf-8", "xxID3yy");
+    def b as bytes init encoding.encode("utf-8", "xxID3yy");
     testing.assertTrue(magicAt($b, 2, "ID3"));
     testing.assertFalse(magicAt($b, 1, "ID3"));
     testing.assertFalse(magicAt($b, 5, "ID3"));
@@ -159,7 +159,7 @@ func testLeadingIntSaturatesRatherThanOverflowing() {
     # spell any number of digits
     testing.assertEqual(leadingInt("999999999"), LEADING_INT_MAX);
     testing.assertEqual(leadingInt("99999999999999999999"), LEADING_INT_MAX);
-    testing.assertEqual(leadingInt(strings.repeat("9", 400)), LEADING_INT_MAX);
+    testing.assertEqual(leadingInt(strings.replicate("9", 400)), LEADING_INT_MAX);
     testing.assertEqual(leadingInt("1000000000"), LEADING_INT_MAX);
     # and the digits after the saturation point are still consumed, so a
     # trailing non-digit does not change the answer

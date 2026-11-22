@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: LGPL-3.0-only
 # SPDX-FileCopyrightText: Copyright (C) 2026 mplx <mplx@jennifer-lang.dev>
-# pragma-jennifer-version: >=0.26.0
+# pragma-jennifer-version: >=0.27.0
 
 # mp3 - the version-independent view of a tag, and the mapping under it.
 # Spliced into mp3.j via include - not a standalone module.
@@ -394,8 +394,8 @@ func splitPair(s as string) {
     if ($cut < 0) {
         return Pair{first: leadingInt($s), second: 0};
     }
-    def head as string init strings.substring($s, 0, $cut);
-    def tail as string init strings.substring($s, $cut + 1);
+    def head as string init $s[..$cut];
+    def tail as string init $s[$cut + 1..];
     return Pair{first: leadingInt($head), second: leadingInt($tail)};
 }
 
@@ -409,7 +409,7 @@ func yearOf(stamp as string) {
     if (len($stamp) < 4) {
         return "";
     }
-    def head as string init strings.substring($stamp, 0, 4);
+    def head as string init $stamp[..4];
     if (leadingInt($head) == 0) {
         return "";
     }
@@ -445,8 +445,8 @@ func commentOf(f as Id3v2Frame) {
         return $out;
     }
     def enc as int init textEncodingOf($f.data[0]);
-    $out.language = decodeLatin1(binary.slice($f.data, 1, 4));
-    def body as bytes init binary.slice($f.data, 4, len($f.data));
+    $out.language = decodeLatin1($f.data[1..4]);
+    def body as bytes init $f.data[4..len($f.data)];
     def description as TextField init readTerminated($body, 0, $enc);
     $out.description = $description.text;
     def text as TextField init readTerminated($body, $description.next, $enc);
@@ -476,7 +476,7 @@ func pictureOf(f as Id3v2Frame, major as int) {
         if (len($f.data) < 6) {
             return $out;
         }
-        $out.mimeType = mediaTypeOf(decodeLatin1(binary.slice($f.data, 1, 4)));
+        $out.mimeType = mediaTypeOf(decodeLatin1($f.data[1..4]));
         $at = 4;
     } else {
         def mime as TextField init readTerminated($f.data, 1, TEXT_LATIN1);
@@ -487,10 +487,10 @@ func pictureOf(f as Id3v2Frame, major as int) {
         return $out;
     }
     $out.kind = $f.data[$at];
-    def body as bytes init binary.slice($f.data, $at + 1, len($f.data));
+    def body as bytes init $f.data[$at + 1..len($f.data)];
     def description as TextField init readTerminated($body, 0, $enc);
     $out.description = $description.text;
-    $out.data = binary.slice($body, $description.next, len($body));
+    $out.data = $body[$description.next..len($body)];
     return $out;
 }
 

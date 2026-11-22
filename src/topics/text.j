@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: LGPL-3.0-only
 # SPDX-FileCopyrightText: Copyright (C) 2026 mplx <mplx@jennifer-lang.dev>
-# pragma-jennifer-version: >=0.26.0
+# pragma-jennifer-version: >=0.27.0
 
 # mp3 - the four ID3v2 text encodings, and the strings built on them.
 # Spliced into mp3.j via include - not a standalone module.
@@ -103,7 +103,7 @@ export func decodeText(data as bytes, enc as int) {
     }
     if ($enc == TEXT_UTF8) {
         try {
-            return convert.stringFromBytes("utf-8", $data);
+            return encoding.decode("utf-8", $data);
         } catch (e) {
             return decodeLatin1($data);
         }
@@ -207,7 +207,7 @@ export func encodeText(s as string, enc as int) {
         fail("unknown ID3v2 text encoding " + convert.toString($enc));
     }
     if ($enc == TEXT_UTF8) {
-        return convert.bytesFromString("utf-8", $s);
+        return encoding.encode("utf-8", $s);
     }
     if ($enc == TEXT_UTF16) {
         return encodeUtf16($s, false, true);
@@ -300,7 +300,7 @@ func isLatin1(s as string) {
  * @return {bool} true when it is
  */
 func isPrintableAscii(s as string) {
-    def raw as bytes init convert.bytesFromString("utf-8", $s);
+    def raw as bytes init encoding.encode("utf-8", $s);
     for (def i as int init 0; $i < len($raw); $i = $i + 1) {
         if ($raw[$i] < 0x20 or $raw[$i] > 0x7e) {
             return false;
@@ -385,10 +385,10 @@ func readTerminated(data as bytes, offset as int, enc as int) {
     def width as int init terminatorSize($enc);
     def end as int init terminatorIndex($data, $offset, $width);
     if ($end < 0) {
-        def whole as bytes init binary.slice($data, $offset, $size);
+        def whole as bytes init $data[$offset..$size];
         return TextField{text: decodeText($whole, $enc), next: $size};
     }
-    def body as bytes init binary.slice($data, $offset, $end);
+    def body as bytes init $data[$offset..$end];
     return TextField{text: decodeText($body, $enc), next: $end + $width};
 }
 
@@ -463,7 +463,7 @@ func trimField(s as string) {
     def cut as int init strings.indexOf($s, convert.fromCodepoint(0));
     def head as string init $s;
     if ($cut >= 0) {
-        $head = strings.substring($s, 0, $cut);
+        $head = $s[..$cut];
     }
     return strings.trim($head);
 }
