@@ -133,4 +133,4 @@ bytes yields `kind` `"VBRI"` with nothing else stated.
 | 22 | 2 | bytes per entry |
 | 24 | 2 | frames per entry |
 
-Written by the Fraunhofer encoder; Xing is more common.
+Written by the Fraunhofer™ encoder; Xing is more common.

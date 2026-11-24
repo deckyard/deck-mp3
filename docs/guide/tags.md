@@ -78,7 +78,7 @@ $tag.comments = $comments;
 ## Comments
 
 Players show the comment with an empty description. Taggers add others keyed
-by description (iTunes writes `iTunNORM` and `iTunSMPB`). `commentText`
+by description (iTunes™ writes `iTunNORM` and `iTunSMPB`). `commentText`
 returns the first comment with an empty description, else the first comment,
 else `""`.
 
@@ -126,7 +126,7 @@ The full table is in [ID3v1 and genres](id3v1.md).
 
 ## User-defined text
 
-`extra` holds the `TXXX` frames by description: MusicBrainz identifiers,
+`extra` holds the `TXXX` frames by description: MusicBrainz™ identifiers,
 ReplayGain values and similar. Each entry is written back as a `TXXX` frame.
 
 ```jennifer

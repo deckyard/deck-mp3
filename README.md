@@ -50,3 +50,12 @@ Contributors: the gate is `tools/check-all.sh`.
 ## Licence
 
 LGPL-3.0-only, see [LICENSE](LICENSE). Copyright (C) 2026 mplx &lt;mplx@jennifer-lang.dev&gt;.
+
+## Trademarks
+
+Fraunhofer™ is a trademark of Fraunhofer-Gesellschaft zur Förderung der
+angewandten Forschung e.V. Winamp™ and other product and company names may
+be trademarks of their respective owners. They are used only to identify the
+products this deck works with. This deck is an independent project, not
+affiliated with, sponsored or endorsed by Winamp Group SA or the
+Fraunhofer-Gesellschaft.

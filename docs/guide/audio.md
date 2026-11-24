@@ -103,7 +103,7 @@ Encoders write the frame count into a first frame that decodes to silence.
 |---|---|---|
 | `Xing` | variable bitrate | after the frame header and side information |
 | `Info` | the same structure, constant bitrate | the same place |
-| `VBRI` | Fraunhofer's format | 32 bytes after the 4-byte frame header |
+| `VBRI` | Fraunhofer™'s format | 32 bytes after the 4-byte frame header |
 
 ```jennifer
 $info.vbrHeader.kind;         # "Xing", "Info", "VBRI" or ""

@@ -64,7 +64,7 @@ $opts.id3v1 = true;
 ## The genre table
 
 `GENRES` holds 192 names (`GENRE_COUNT`): 0-79 are the original ID3v1 list,
-80-125 the Winamp 1.x extensions, 126-147 Winamp 5.0 and 148-191 Winamp 5.6.
+80-125 the Winamp™ 1.x extensions, 126-147 Winamp 5.0 and 148-191 Winamp 5.6.
 192 and up are unassigned; 255 is the conventional "no genre".
 
 ```jennifer
