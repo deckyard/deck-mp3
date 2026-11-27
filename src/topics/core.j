@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: LGPL-3.0-only
 # SPDX-FileCopyrightText: Copyright (C) 2026 mplx <mplx@jennifer-lang.dev>
-# pragma-jennifer-version: >=0.27.0
+# pragma-jennifer-version: >=0.28.0
 
 # mp3 - the shared primitives every other topic builds on.
 # Spliced into mp3.j via include - not a standalone module.
@@ -121,12 +121,7 @@ func beUint32Bytes(value as int) {
     if ($value < 0 or $value > UINT32_MAX) {
         fail(convert.toString($value) + " does not fit in a 32-bit field");
     }
-    def out as bytes;
-    $out[] = ($value >> 24) & 0xff;
-    $out[] = ($value >> 16) & 0xff;
-    $out[] = ($value >> 8) & 0xff;
-    $out[] = $value & 0xff;
-    return $out;
+    return binary.fromUint("be", $value, 4);
 }
 
 /**

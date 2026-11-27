@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: LGPL-3.0-only
 # SPDX-FileCopyrightText: Copyright (C) 2026 mplx <mplx@jennifer-lang.dev>
-# pragma-jennifer-version: >=0.27.0
+# pragma-jennifer-version: >=0.28.0
 
 # mp3 - the ID3v2 container: header, frames, unsynchronisation.
 # Spliced into mp3.j via include - not a standalone module.
@@ -809,9 +809,7 @@ func renderFrame(f as Id3v2Frame, major as int) {
         if ($size > 0xffffff) {
             fail("frame " + $f.id + " is too long for ID3v2.2");
         }
-        $parts[] = binary.make(1, ($size >> 16) & 0xff);
-        $parts[] = binary.make(1, ($size >> 8) & 0xff);
-        $parts[] = binary.make(1, $size & 0xff);
+        $parts[] = binary.fromUint("be", $size, 4)[1..4];
         $parts[] = $f.data;
         return binary.join($parts);
     }

@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: LGPL-3.0-only
 # SPDX-FileCopyrightText: Copyright (C) 2026 mplx <mplx@jennifer-lang.dev>
-# pragma-jennifer-version: >=0.27.0
+# pragma-jennifer-version: >=0.28.0
 
 # mp3 - white-box tests for the id3v2 topic.
 # Spliced into mp3_test.j via include - run with:
@@ -92,6 +92,22 @@ func artistId(major as int) {
         return "TP1";
     }
     return "TPE1";
+}
+
+func testFrameSizeFieldBytes() {
+    # 0x010203 bytes of data: ID3v2.2 writes the size in 3 bytes, 2.3 in 4,
+    # both big-endian; 2.4 writes it synchsafe.
+    def data as bytes init binary.make(0x010203);
+    def v22 as bytes init renderFrame(Id3v2Frame{id: "TT2", flags: 0, data: $data}, 2);
+    testing.assertEqual(encoding.toText("hex", $v22[..6]), "545432010203");
+    testing.assertEqual(len($v22), 6 + len($data));
+    def v23 as bytes init renderFrame(Id3v2Frame{id: "TIT2", flags: 0, data: $data}, 3);
+    testing.assertEqual(encoding.toText("hex", $v23[..10]), "54495432000102030000");
+    testing.assertEqual(len($v23), 10 + len($data));
+    def top as bytes init renderFrame(
+        Id3v2Frame{id: "TT2", flags: 0, data: binary.make(0xffffff)},
+        2);
+    testing.assertEqual(encoding.toText("hex", $top[..6]), "545432ffffff");
 }
 
 func testPaddingIsNulAndEndsTheFrameList() {
